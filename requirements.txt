@@ -1,0 +1,10 @@
+qaseio>=4.0.1
+certifi
+requests
+urllib3
+pandas
+openpyxl
+
+# Optional — only needed to migrate attachment binaries (browser-session CDN).
+# Install with:  pip install playwright && playwright install chromium
+# playwright

@@ -1,0 +1,22 @@
+# Never commit credentials or run artifacts — this repo may be public.
+config.json
+logs/
+stats/
+cache/
+
+# Captured browser session for attachment downloads — a full session credential.
+zephyr_session.json
+*_session.json
+playwright_*_session.json
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+# Internal QA seeders — never ship in the public repo (they write junk data into a Zephyr tenant)
+setup_test_data*.py
+
+*.db

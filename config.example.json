@@ -1,0 +1,52 @@
+{
+    "qase": {
+        "api_token": "<QASE_API_TOKEN>",
+        "host": "qase.io",
+        "ssl": true,
+        "dedicated_cluster": false
+    },
+    "zephyr": {
+        "access_token": "<ZEPHYR_API_ACCESS_TOKEN>",
+        "base_url": "https://prod-api.zephyr4jiracloud.com/v2",
+        "attachments": {
+            "enabled": false,
+            "session_file": "./zephyr_session.json",
+            "app_page_url": ""
+        }
+    },
+    "jira": {
+        "base_url": "https://your-site.atlassian.net",
+        "email": "",
+        "api_token": ""
+    },
+    "projects": {
+        "import_all": false,
+        "import": [
+            "KEY1"
+        ],
+        "exclude": [],
+        "mapping": {}
+    },
+    "cases": {
+        "priority_map": {},
+        "preserve_ids": true
+    },
+    "runs": {
+        "created_after": 0,
+        "status_map": {}
+    },
+    "users": {
+        "default": "<QASE_DEFAULT_USER_EMAIL>",
+        "map": {}
+    },
+    "migration": {
+        "allow_existing_target": false,
+        "delta": false
+    },
+    "logging": {
+        "level": "info",
+        "write_to_file": true,
+        "dir": "./logs"
+    },
+    "prefix": ""
+}
