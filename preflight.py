@@ -315,12 +315,15 @@ def main():
 
     # ---------------- Qase ----------------
     print("\n- Qase -")
+    from src.service.qase import qase_api_url, is_dedicated_cluster
+
     qase_host = str(config.get("qase.host") or "qase.io")
-    scheme = "https" if config.get("qase.ssl") in (None, True) else "http"
-    delimiter = "-" if config.get("qase.dedicated_cluster") else "."
+    api_url = qase_api_url(config)
+    if is_dedicated_cluster(qase_host):
+        _report("Qase host", True, f"{qase_host} treated as a dedicated cluster: {api_url}")
     try:
         resp = requests.get(
-            f"{scheme}://api{delimiter}{qase_host}/v1/project",
+            f"{api_url}/v1/project",
             headers={"Token": str(config.get("qase.api_token"))},
             params={"limit": 1},
             timeout=(15, 30),

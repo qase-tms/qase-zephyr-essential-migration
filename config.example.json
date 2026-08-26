@@ -2,8 +2,7 @@
     "qase": {
         "api_token": "<QASE_API_TOKEN>",
         "host": "qase.io",
-        "ssl": true,
-        "dedicated_cluster": false
+        "ssl": true
     },
     "zephyr": {
         "access_token": "<ZEPHYR_API_ACCESS_TOKEN>",

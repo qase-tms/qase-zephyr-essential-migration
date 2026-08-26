@@ -49,22 +49,33 @@ from datetime import datetime
 from qaseio.exceptions import ApiException
 
 
+# The public cloud. Any other host is a dedicated cluster, which Qase serves at
+# api-<host> rather than api.<host>. That single fact is everything the old
+# qase.dedicated_cluster flag encoded, and it is already implied by qase.host,
+# so the flag was removed rather than asking a customer to restate it.
+_PUBLIC_CLOUD_HOST = 'qase.io'
+
+
+def is_dedicated_cluster(host: str) -> bool:
+    return bool(host) and str(host).strip().lower() != _PUBLIC_CLOUD_HOST
+
+
+def qase_api_url(config) -> str:
+    """Base URL for the Qase REST API, derived from qase.host."""
+    host = str(config.get('qase.host') or _PUBLIC_CLOUD_HOST).strip()
+    scheme = 'http://' if config.get('qase.ssl') is False else 'https://'
+    delimiter = '-' if is_dedicated_cluster(host) else '.'
+    return f'{scheme}api{delimiter}{host}'
+
+
 class QaseService:
     def __init__(self, config: ConfigManager, logger: Logger):
         self.config = config
         self.logger = logger
 
-        ssl = 'http://'
-        if config.get('qase.ssl') is None or config.get('qase.ssl'):
-            ssl = 'https://'
-
-        delimiter = '.'
-        if config.get('qase.dedicated_cluster') is not None and config.get('qase.dedicated_cluster'):
-            delimiter = '-'
-
         configuration = Configuration()
         configuration.api_key['TokenAuth'] = config.get('qase.api_token')
-        configuration.host = f'{ssl}api{delimiter}{config.get("qase.host")}/v1'
+        configuration.host = f'{qase_api_url(config)}/v1'
         configuration.ssl_ca_cert = certifi.where()
 
         self.client = ApiClient(configuration)

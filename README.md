@@ -131,9 +131,8 @@ Edit `config.json`. Every key below is read by the code, and every key the code 
 | Key | Required | Default | Meaning |
 |---|---|---|---|
 | `qase.api_token` | yes | | API token from **Workspace > API tokens** |
-| `qase.host` | yes | `qase.io` | Leave as-is unless you are on a dedicated cluster |
+| `qase.host` | yes | `qase.io` | Your Qase host. Leave as `qase.io` on the public cloud. On a dedicated cluster set it to your own host, for example `acme.qase.io`, and the API URL is derived from it |
 | `qase.ssl` | no | `true` | Use HTTPS |
-| `qase.dedicated_cluster` | no | `false` | Set only if Qase runs on your own dedicated cluster with its own hostname. Unrelated to the Qase Enterprise plan |
 
 ### Zephyr
 
