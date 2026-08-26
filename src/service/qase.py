@@ -50,9 +50,10 @@ from qaseio.exceptions import ApiException
 
 
 # The public cloud. Any other host is a dedicated cluster, which Qase serves at
-# api-<host> rather than api.<host>. That single fact is everything the old
-# qase.dedicated_cluster flag encoded, and it is already implied by qase.host,
-# so the flag was removed rather than asking a customer to restate it.
+# api-<host> rather than api.<host>. That fact is implied by qase.host, so there
+# is no separate flag for it: a boolean would only restate the host, and reads
+# as "I am on a paid plan", which on the public cloud yields the unresolvable
+# api-qase.io.
 _PUBLIC_CLOUD_HOST = 'qase.io'
 
 
@@ -474,9 +475,9 @@ class QaseService:
                 )
                 out.append(None)
                 continue
-            # Folderless cases (suite_id None) hydrate by title alone — omitting
-            # the suite filter. Previously they were skipped entirely, which
-            # broke stats and dropped their run results (found by stress test).
+            # Folderless cases (suite_id None) hydrate by title alone, omitting
+            # the suite filter. They must not be skipped: that breaks the stats
+            # and drops their run results.
             kwargs = {"code": code, "search": title, "limit": 100, "offset": 0}
             if suite_id is not None:
                 kwargs["suite_id"] = int(suite_id)

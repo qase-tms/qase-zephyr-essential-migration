@@ -122,6 +122,6 @@ class Stats:
             with pd.ExcelWriter(stats_file, engine='openpyxl') as writer:
                 df.to_excel(writer, index=False, sheet_name='Comparison')
         except Exception as e:
-            # Never fail the run over the XLSX — but never vanish silently either
-            # (missing pandas/openpyxl used to mean the file just never appeared).
-            print(f"\t\033[33m!\033[0m [warning] Stats XLSX not written: {e!r} (JSON stats are saved)")
+            # Never fail the run over the XLSX, and never fail silently either:
+            # without this, a missing pandas/openpyxl just means no file appears.
+            print(f"\t\033[33m!\033[0m [warn] Stats XLSX not written: {e!r} (JSON stats are saved)")
