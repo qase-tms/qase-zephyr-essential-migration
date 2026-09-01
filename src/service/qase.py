@@ -1131,7 +1131,7 @@ class QaseService:
         return total_seconds
 
     def upload_attachment(self, code, attachment_data):
-        """Upload to Qase. ``attachment_data`` is a filesystem path (str), or ``(filename, bytes)`` as in TestRail §3.1.
+        """Upload to Qase. ``attachment_data`` is a filesystem path (str), or ``(filename, bytes)``.
 
         The qaseio client accepts path strings or ``io.BytesIO`` with ``.name`` and ``.mime`` set; tuple input is wrapped that way.
         """
