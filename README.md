@@ -113,7 +113,7 @@ The Essential API returns project name, components and fixVersions as bare Jira 
 
 ## 5. Install
 
-Requires **Python 3.10 or newer**.
+Requires **Python 3.11 or newer.**.
 
 ```bash
 python3 -m venv .venv

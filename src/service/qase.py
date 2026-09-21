@@ -70,6 +70,18 @@ def qase_api_url(config) -> str:
 
 
 class QaseService:
+    # Max results per create_result_bulk call.
+    #
+    # Qase lowered the server-side bulk-results limit from 2000 to 200 to smooth
+    # load spikes. The generated client still validates client-side at 2000, so
+    # it will happily build a larger body that the API then rejects, and a single
+    # oversized run used to lose every one of its results that way. Sit at the
+    # new limit instead.
+    #
+    # The cost is extra HTTP calls, not extra data, and Qase writes were never
+    # the bottleneck here; source reads are.
+    _RESULT_BULK_CHUNK = 200
+
     def __init__(self, config: ConfigManager, logger: Logger):
         self.config = config
         self.logger = logger
@@ -1061,33 +1073,41 @@ class QaseService:
             if len(res) > 0:
                 api_results = ResultsApi(self.client)
                 self.logger.log(f'Sending {len(res)} results to Qase')
-                try:
-                    api_results.create_result_bulk(
-                            code=qase_code,
-                            id=int(qase_run_id),
-                            resultcreate_bulk=ResultcreateBulk(
-                                results=res
-                            )
-                        )
-                except ApiException as e:
-                    # A per-step payload Qase rejects (e.g. step count not
-                    # matching the case) must not cost the whole run its
-                    # results — retry once without steps.
-                    if any('steps' in r for r in res):
+                total_chunks = -(-len(res) // self._RESULT_BULK_CHUNK)
+                for start in range(0, len(res), self._RESULT_BULK_CHUNK):
+                    chunk = res[start:start + self._RESULT_BULK_CHUNK]
+                    if total_chunks > 1:
                         self.logger.log(
-                            f'[Qase][Results] {qase_code} run {qase_run_id}: bulk with steps '
-                            f'rejected (status={getattr(e, "status", None)}); retrying without '
-                            f'step-level results', 'warning',
+                            f'  chunk {start // self._RESULT_BULK_CHUNK + 1}/{total_chunks}'
+                            f' ({len(chunk)} result(s))'
                         )
-                        for r in res:
-                            r.pop('steps', None)
+                    try:
                         api_results.create_result_bulk(
                             code=qase_code,
                             id=int(qase_run_id),
-                            resultcreate_bulk=ResultcreateBulk(results=res),
+                            resultcreate_bulk=ResultcreateBulk(
+                                results=chunk
+                            )
                         )
-                    else:
-                        raise
+                    except ApiException as e:
+                        # A per-step payload Qase rejects (e.g. step count not
+                        # matching the case) must not cost the whole run its
+                        # results, retry this chunk once without steps.
+                        if any('steps' in r for r in chunk):
+                            self.logger.log(
+                                f'[Qase][Results] {qase_code} run {qase_run_id}: bulk with steps '
+                                f'rejected (status={getattr(e, "status", None)}); retrying without '
+                                f'step-level results', 'warn',
+                            )
+                            for r in chunk:
+                                r.pop('steps', None)
+                            api_results.create_result_bulk(
+                                code=qase_code,
+                                id=int(qase_run_id),
+                                resultcreate_bulk=ResultcreateBulk(results=chunk),
+                            )
+                        else:
+                            raise
 
     def prepare_result_steps(self, steps, status_map) -> list:
         allowed_statuses = ['passed', 'failed', 'blocked', 'skipped']

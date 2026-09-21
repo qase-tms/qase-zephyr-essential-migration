@@ -25,6 +25,16 @@ from src.support.zephyr_session import SESSION_MAX_AGE_DAYS
 from src.api.zephyr_essential import ZephyrEssentialApiClient
 from src.exceptions.api import APIError
 
+# STANDARD.md section 2: Python 3.11 minimum. asyncio.TaskGroup is used by the
+# entity importers and does not exist before 3.11; 3.10 reaches end of life in
+# October 2026. Fail here rather than partway into a run.
+if sys.version_info < (3, 11):
+    sys.exit(
+        f"This migration requires Python 3.11 or newer "
+        f"(found {sys.version_info.major}.{sys.version_info.minor})."
+    )
+
+
 _PLACEHOLDER_MARKERS = ("<", ">", "your-", "YOUR_", "changeme", "xxxx")
 
 _results = []
