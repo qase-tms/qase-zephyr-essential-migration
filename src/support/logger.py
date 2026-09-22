@@ -9,7 +9,6 @@ def read_version() -> str:
 
     Surfaced in the log header and the end-of-run report so a customer's
     attached log answers "which version are you on?" without anyone asking.
-    See STANDARD.md section 9a.
     """
     try:
         path = os.path.join(

@@ -1,7 +1,4 @@
 # Code owners for the Qase Zephyr Essential migration script.
-#
-# Every pull request requires a review from an owner listed here.
-# TODO: replace with the Qase team handle once this repository moves to the
-# qase-tms organization, so review does not depend on one individual.
+# Pull requests require a review from an owner listed here.
 
 * @rmontemor-qase

@@ -5,7 +5,7 @@ from src.support.config_manager import ConfigManager
 from src.support.logger import Logger
 from src.importer import Importer
 
-# STANDARD.md section 2: Python 3.11 minimum. asyncio.TaskGroup is used by the
+# Python 3.11 minimum. asyncio.TaskGroup is used by the
 # entity importers and does not exist before 3.11; 3.10 reaches end of life in
 # October 2026. Fail here rather than partway into a run.
 if sys.version_info < (3, 11):
