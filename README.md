@@ -313,6 +313,7 @@ GitHub Issues and Discussions are disabled on this repository, so email is the w
 
 To get a useful answer on the first reply, include:
 
+- The version, which is the first line of the log file and the last line the run prints
 - What you ran, and the output of `python preflight.py`
 - Your `config.json` **with every token removed**
 - The relevant part of the log from `logs/`, again with tokens removed
@@ -321,3 +322,5 @@ To get a useful answer on the first reply, include:
 Please do not send API tokens or customer data. If a log is large, describe the error and we will tell you what to send.
 
 **Want us to run it?** A fully managed migration, including adapting the script to your data structures, is available as a paid service. Email the same address.
+
+Every release is listed in [CHANGELOG.md](CHANGELOG.md).

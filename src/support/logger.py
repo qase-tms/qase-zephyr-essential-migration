@@ -3,6 +3,25 @@ import os
 import sys
 
 
+
+def read_version() -> str:
+    """Version of this migration, from the VERSION file at the repo root.
+
+    Surfaced in the log header and the end-of-run report so a customer's
+    attached log answers "which version are you on?" without anyone asking.
+    See STANDARD.md section 9a.
+    """
+    try:
+        path = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+            "VERSION",
+        )
+        with open(path, "r", encoding="utf-8") as handle:
+            version = handle.read().strip()
+        return version or "unknown"
+    except OSError:
+        return "unknown"
+
 class Logger:
     """Level-based logger.
 
@@ -30,6 +49,7 @@ class Logger:
         self.level = self.LEVELS[self.level_name]
         self.write_to_file = write_to_file
         self.log_file = None
+        self.version = read_version()
 
         if self.write_to_file:
             timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -37,8 +57,12 @@ class Logger:
             if not os.path.exists(log_dir):
                 os.makedirs(log_dir)
             self.log_file = os.path.join(log_dir, filename)
-            with open(self.log_file, 'w'):
-                pass
+            # First line of every log: the version, so a customer's attached log
+            # answers "which version are you on?" without anyone asking.
+            with open(self.log_file, 'w', encoding='utf-8') as f:
+                f.write(f'# qase-zephyr-essential-migration '
+                        f'v{self.version} | started '
+                        f'{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}\n')
 
     @classmethod
     def _normalise(cls, level) -> str:

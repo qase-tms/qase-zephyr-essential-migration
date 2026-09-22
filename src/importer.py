@@ -188,6 +188,9 @@ class Importer:
             print("\n\t\033[36m▷\033[0m DRY RUN complete, nothing was written to Qase.")
         self.mappings.stats.save(prefix)
         self.mappings.stats.save_xlsx(prefix)
+        print(f"\nqase-zephyr-essential-migration v{self.logger.version}")
+        if self.logger.log_file:
+            print(f"Full log: {self.logger.log_file}")
 
     def _import_project_data(self, project: dict):
         self.logger.print_group(f'Importing project: {project["name"]} [{project["code"]}]')
