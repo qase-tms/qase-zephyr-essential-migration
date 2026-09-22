@@ -745,9 +745,8 @@ class Cases:
 
         A step is either ``{"inline": {...}, "testCase": null}`` or a
         call-to-test ``{"inline": null, "testCase": {"testCaseKey": ...}}`` -
-        the latter is rendered as a textual "Call to test" step (Qase bulk
-        create cannot reference shared steps; see BACKLOG.md for the native
-        shared-step option).
+        the latter is rendered as a textual "Call to test" step, because Qase
+        bulk create cannot reference shared steps.
         """
         steps = []
         for step in raw_steps:

@@ -77,7 +77,7 @@ Against the official OpenAPI spec at `https://api.swaggerhub.com/apis/smartbear-
 
 **Per-case estimated time is not migrated.** The Qase bulk case endpoint has no field for it.
 
-**Call-to-test steps become text.** A step referencing another case is rendered as `-> Call to test case KEY`, because Qase bulk create cannot reference shared steps. Native shared-step conversion is tracked in `BACKLOG.md`.
+**Call-to-test steps become text.** A step referencing another case is rendered as `-> Call to test case KEY`, because Qase bulk create cannot reference shared steps. The referenced case is still migrated in its own right.
 
 **Re-running duplicates data** unless you use delta mode. See section 10.
 

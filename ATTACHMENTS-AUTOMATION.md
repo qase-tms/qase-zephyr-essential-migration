@@ -5,7 +5,7 @@ fully automated — ideally with only an API token; Jira email+API-token accepta
 for a large enterprise where SSO/MFA may block interactive logins?
 
 Short answer: **no token-only path exists today.** Every angle was researched
-(official Atlassian/SmartBear docs + live probes against our sandbox tenant);
+(official Atlassian/SmartBear docs, plus live probes against a test tenant);
 the practical enterprise answer is a **Guard authentication-policy exemption
 for one migration account** (option 3), with a SmartBear support ticket
 (option 2) as the parallel track.
